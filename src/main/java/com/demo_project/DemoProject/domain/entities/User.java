@@ -1,8 +1,10 @@
 package com.demo_project.DemoProject.domain.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -19,6 +21,20 @@ public class User extends BaseEntity {
 
     @Column(name = "phone_number")
     private Integer phoneNumber;
+
+    @OneToMany(fetch = FetchType.EAGER)
+    private List<UserRole> userRoles = Collections.unmodifiableList(new ArrayList<>());
+
+    public User() {
+    }
+
+    public User(String name, String email, String password, Integer phoneNumber) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+        this.phoneNumber = phoneNumber;
+    }
+
 
     public String getName() {
         return name;
@@ -50,5 +66,13 @@ public class User extends BaseEntity {
 
     public void setPhoneNumber(Integer phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public List<UserRole> getUserRoles() {
+        return userRoles;
+    }
+
+    public void setUserRoles(List<UserRole> userRoles) {
+        this.userRoles = userRoles;
     }
 }
