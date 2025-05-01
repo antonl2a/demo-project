@@ -2,7 +2,7 @@ package com.demo_project.DemoProject.web.controller;
 
 import com.demo_project.DemoProject.domain.dto.UserDto;
 import com.demo_project.DemoProject.exception.DemoAppException;
-import com.demo_project.DemoProject.web.controller.service.impl.AuthenticationService;
+import com.demo_project.DemoProject.web.service.AuthenticationService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatusCode;
@@ -21,7 +21,7 @@ public class AuthenticationController {
     }
 
     @PostMapping(path = "/register")
-    public ResponseEntity<String> register(UserDto user) {
+    public ResponseEntity<String> register(@RequestBody UserDto user) {
         try {
             authenticationService.registerUser(user);
         } catch(DemoAppException demoAppException) {
@@ -29,6 +29,16 @@ public class AuthenticationController {
         }
 
         return new ResponseEntity<>(HttpStatusCode.valueOf(201));
+    }
+
+    @PostMapping(path = "/login")
+    public ResponseEntity<String> login(@RequestBody UserDto user) {
+        try {
+            authenticationService.loginUser(user);
+        } catch(DemoAppException demoAppException) {
+            return new ResponseEntity<>("User validation failed", HttpStatusCode.valueOf(403));
+        }
+        return new ResponseEntity<>(HttpStatusCode.valueOf(200));
     }
 
     @ExceptionHandler(DemoAppException.class)
